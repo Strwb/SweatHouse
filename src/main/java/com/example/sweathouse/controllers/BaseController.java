@@ -1,24 +1,26 @@
 package com.example.sweathouse.controllers;
 
-import com.example.sweathouse.database.entities.Exercise;
-import com.example.sweathouse.database.services.ExerciseServiceImplementation;
+import com.example.sweathouse.database.entities.Tag;
+import com.example.sweathouse.database.repositories.TagRepository;
 import com.example.sweathouse.database.services.inter.ExerciseService;
-import com.fasterxml.jackson.databind.ser.Serializers;
+import com.example.sweathouse.database.services.inter.TagService;
+import com.example.sweathouse.postObjects.AddExerciseFormData;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
 public class BaseController {
 
     private final ExerciseService exerciseService;
+    private final TagService tagService;
 
-    public BaseController(ExerciseService exerciseService) {
+    public BaseController(ExerciseService exerciseService, TagService tagService) {
         this.exerciseService = exerciseService;
+        this.tagService = tagService;
     }
 
     @GetMapping("")
@@ -32,27 +34,19 @@ public class BaseController {
         return "home";
     }
 
-    @GetMapping("initialize")
-    public String hiddenInitializeUrl() {
-        this.exerciseService.initializeDb();
-        return "redirect:/home";
-    }
-
     @GetMapping("addExercise")
     public String addExercise(Model model) {
-        Exercise exercise = new Exercise();
-        model.addAttribute("newExercise", exercise);
+//        List<Tag> tagsAvailable = this.tagService.getAllTags();
+        model.addAttribute("tempExerciseUtil", new AddExerciseFormData());
+        model.addAttribute("tagsAvailable", this.tagService.getAllTags());
         return "add-exercise";
     }
 
     @PostMapping("saveNewExercise")
-    public String saveNewExercise(@RequestParam("newExercise") Exercise exercise) {
-        //TODO:
-        // - Separate form for tags, because we're doing them exactly like in Mendeley
-        // - Decide on how to process steps (I think a method of creating them based on String will be fine)
-        // - Split tags, and properly add them to the newly created exercise
-        // - Save the new Exercise object to the database
-        // - Redirect home
+    public String saveNewExercise(@ModelAttribute("tempExerciseUtil") AddExerciseFormData tempExerciseUtil) {
+//        System.out.println(tempExerciseUtil);
+        System.out.println("WHAT IS HAPPENING?!");
+        this.exerciseService.saveExercise(tempExerciseUtil);
         return "redirect:/home";
     }
 }

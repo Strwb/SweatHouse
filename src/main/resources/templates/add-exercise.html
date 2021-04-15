@@ -14,30 +14,31 @@
     <h1>SweatHouse - Add Exercise</h1>
 </div>
 <div>
-    <form action="#" method="post" th:action="@{saveNewExercise}" th:object="newExercise">
+    <form action="#" method="post" th:action="@{saveNewExercise}" th:object="${tempExerciseUtil}">
         <table>
             <tr>
                 <td><label>Exercise Name</label></td>
-                <td><input type="text" name="nameField"/></td>
+                <td><input type="text" th:field="*{name}" name="name"/></td>
             </tr>
             <tr>
                 <td><label>Exercise Source</label></td>
-                <td><input type="text" name="sourceField"/></td>
+                <td><input type="text" th:field="*{source}" name="source"/></td>
             </tr>
 
-            <tr th:each="i: ${#numbers.sequence(1, 5)}">
-                <td><label th:text="'Step ' + ${i}"></label></td>
-                <td><input type="text" th:name="'step' + ${i}"/></td>
-            </tr>
-            <!--                We do tags exactly like in mendeley-->
+            <!--                We do steps exactly like in mendeley-->
             <tr>
-                <td><label>Tags</label></td>
-                <td><input type="text" name="tags"/></td>
+                <td><label>Exercise steps (separate them with ";")</label></td>
+                <td><input type="text"th:field="*{stepsRaw}" name="stepsRaw"/></td>
+            </tr>
 
+            <tr></tr>
+            <tr th:each="choice : ${tagsAvailable}">
+                <td><label>Tag: <span th:text="${choice.name}"></span></label></td>
+                <td><input type="checkbox" name="tagsChosen" th:value="${choice.id}" th:field="*{tagsSelected}"/></td>
             </tr>
             <tr>
                 <td><label>Exercise Remarks</label></td>
-                <td><input type="text" name="remarksField"></td>
+                <td><input type="text" th:field="*{remarks}" name="remarks"></td>
             </tr>
             <tr>
                 <td></td>

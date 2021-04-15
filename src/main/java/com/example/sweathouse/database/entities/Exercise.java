@@ -1,10 +1,9 @@
 package com.example.sweathouse.database.entities;
 
+import com.example.sweathouse.postObjects.AddExerciseFormData;
+
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "exercises")
@@ -36,14 +35,30 @@ public class Exercise {
     )
     private List<Tag> tags;
 
+//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "exercises_tags",
+//            joinColumns = @JoinColumn(name = "exercise_id"),
+//            inverseJoinColumns = @JoinColumn(name = "tag_id")
+//    )
+//    private Set<Tag> tags;
+
+    public Exercise() {
+
+    }
+
     public Exercise(String name, String source, String remarks) {
         this.name = name;
         this.source = source;
         this.remarks = remarks;
     }
 
-    public Exercise() {
-
+    public Exercise(AddExerciseFormData addExerciseFormData) {
+        this.name = addExerciseFormData.getName();
+        this.source = addExerciseFormData.getSource();
+        this.remarks = addExerciseFormData.getRemarks();
+        this.addTags(addExerciseFormData.getTagsSelected());
+        this.addSteps(addExerciseFormData.getStepList());
     }
 
     public int getId() {
@@ -86,7 +101,7 @@ public class Exercise {
         this.steps = steps;
     }
 
-    public void addStep(Step step) {
+    public void addSteps(Step step) {
         if (this.steps == null) {
             this.steps = new ArrayList<>();
         }
@@ -94,9 +109,15 @@ public class Exercise {
         step.setExercise(this);
     }
 
+    public void addSteps(List<Step> steps) {
+        for (Step step : steps) {
+            this.addSteps(step);
+        }
+    }
+
     public void addManyStepsByInstructions(List<String> stepsInstructions) {
         for (String instruction : stepsInstructions) {
-            this.addStep(new Step(instruction));
+            this.addSteps(new Step(instruction));
         }
     }
 
@@ -112,12 +133,41 @@ public class Exercise {
         this.tags = tags;
     }
 
-    public void addTag(Tag tag) {
+    public void addTags(Tag tag) {
         if (this.tags == null) {
             this.tags = new ArrayList<>();
         }
         this.tags.add(tag);
         tag.addExercise(this);
+    }
+
+//    public Set<Tag> getTags() {
+//        return tags;
+//    }
+//
+//    public void setTags(Set<Tag> tags) {
+//        this.tags = tags;
+//    }
+//
+//    public void addTags(Tag tag) {
+//        if (this.tags == null) {
+//            this.tags = new HashSet<>();
+//        }
+//        this.tags.add(tag);
+//        tag.addExercise(this);
+//    }
+
+    public void addTags(List<Tag> tags) {
+        for (Tag tag : tags) {
+            this.addTags(tag);
+        }
+    }
+
+    public void createTagsFromFormInput(String formInput) {
+        String[] splitTagStrings = formInput.split(";");
+        for (String tagString : splitTagStrings) {
+            this.addTags(new Tag(tagString));
+        }
     }
 
     @Override
