@@ -19,8 +19,7 @@
           <option th:each="choice : ${T(com.example.sweathouse.util.searchUtil.SearchCategory).values()}"
                   th:value="${choice}" th:text="${choice.getDisplayName()}"></option>
         </select>
-
-          <input type="text" name="searchBox"/>
+          <input type="text" name="searchBox" th:field="*{searchInput}"/>
           <input type="submit" value="Submit"/>
           <input type="reset" value="Reset"/>
       </form>

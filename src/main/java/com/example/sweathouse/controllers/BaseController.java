@@ -48,7 +48,9 @@ public class BaseController {
     }
 
     @GetMapping("searchForExercise")
-    public String searchForExercise(@ModelAttribute("searchWrapper") SearchWrapper wrapper) {
+    public String searchForExercise(Model model,
+                                    @ModelAttribute("searchWrapper") SearchWrapper wrapper) {
+        model.addAttribute("exercises", this.exerciseService.searchExercise(wrapper));
         return "search-result";
     }
 }

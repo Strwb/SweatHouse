@@ -7,4 +7,45 @@
 <body>
 
 </body>
+</html><!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en">
+<head>
+    <meta
+            charset="UTF-8"
+            http-equiv="Content-Type" content="text/html" />
+    <title>SweatHouse</title>
+</head>
+<body>
+<div>
+    <!--    WEBSITE NAME-->
+    <h1>SweatHouse</h1>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Source</th>
+            <th>Steps</th>
+            <th>Remarks</th>
+            <th>Tags</th>
+        </tr>
+        <tr th:each="exercise : ${exercises}">
+            <td th:text="${exercise.getName()}"></td>
+            <td th:text="${exercise.getSource()}"></td>
+            <td>
+                <ul>
+                    <li th:each="step : ${exercise.getSteps()}" th:text="${step.getStep()}"></li>
+                </ul>
+            </td>
+            <td th:text="${exercise.getRemarks()}"></td>
+            <td>
+                <ul>
+                    <li th:each="tag : ${exercise.getTags()}" th:text="${tag.getName()}"></li>
+                </ul>
+            </td>
+        </tr>
+
+    </table>
+</div>
+</body>
 </html>

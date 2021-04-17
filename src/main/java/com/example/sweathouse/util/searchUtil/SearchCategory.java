@@ -13,4 +13,11 @@ public enum SearchCategory {
     public String getDisplayName() {
         return this.displayName;
     }
+
+//    @Override
+//    public String toString() {
+//        return "SearchCategory{" +
+//                "displayName='" + displayName + '\'' +
+//                '}';
+//    }
 }
