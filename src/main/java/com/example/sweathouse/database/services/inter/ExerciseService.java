@@ -1,8 +1,7 @@
 package com.example.sweathouse.database.services.inter;
 
 import com.example.sweathouse.database.entities.Exercise;
-import com.example.sweathouse.database.entities.Tag;
-import com.example.sweathouse.postObjects.AddExerciseFormData;
+import com.example.sweathouse.util.postObjects.AddExerciseFormData;
 
 import java.util.List;
 

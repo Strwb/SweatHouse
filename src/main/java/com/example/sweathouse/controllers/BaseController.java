@@ -1,15 +1,12 @@
 package com.example.sweathouse.controllers;
 
-import com.example.sweathouse.database.entities.Tag;
-import com.example.sweathouse.database.repositories.TagRepository;
 import com.example.sweathouse.database.services.inter.ExerciseService;
 import com.example.sweathouse.database.services.inter.TagService;
-import com.example.sweathouse.postObjects.AddExerciseFormData;
+import com.example.sweathouse.util.postObjects.AddExerciseFormData;
+import com.example.sweathouse.util.searchUtil.SearchWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -31,6 +28,7 @@ public class BaseController {
     @GetMapping("home")
     public String homePage(Model model) {
         model.addAttribute("exercises", this.exerciseService.getAllExercises());
+        model.addAttribute("searchWrapper", new SearchWrapper());
         return "home";
     }
 
@@ -45,8 +43,12 @@ public class BaseController {
     @PostMapping("saveNewExercise")
     public String saveNewExercise(@ModelAttribute("tempExerciseUtil") AddExerciseFormData tempExerciseUtil) {
 //        System.out.println(tempExerciseUtil);
-        System.out.println("WHAT IS HAPPENING?!");
         this.exerciseService.saveExercise(tempExerciseUtil);
         return "redirect:/home";
+    }
+
+    @GetMapping("searchForExercise")
+    public String searchForExercise(@ModelAttribute("searchWrapper") SearchWrapper wrapper) {
+        return "search-result";
     }
 }

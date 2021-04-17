@@ -1,12 +1,11 @@
-package com.example.sweathouse.postObjects;
+package com.example.sweathouse.util.postObjects;
 
 import com.example.sweathouse.database.entities.Step;
 import com.example.sweathouse.database.entities.Tag;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Locale;
 
 public class AddExerciseFormData {
 
@@ -28,14 +27,26 @@ public class AddExerciseFormData {
     }
 
     public void prepareForEntity() {
+        this.prepareName();
         this.prepareSteps();
+        this.prepareRemarks();
     }
 
     private void prepareSteps() {
         String[] stepsSplit = this.stepsRaw.split(";");
+        // steps are entered in order from the first one to the last, when quering database the order should be
+        // automatically upheld
         for (int i = 0; i < stepsSplit.length; i++) {
-            this.stepList.add(new Step(String.format("%d. %s", i + 1, stepsSplit[i].trim())));
+            this.stepList.add(new Step(String.format("%d. %s", i + 1, stepsSplit[i].trim().toLowerCase(Locale.ROOT))));
         }
+    }
+
+    private void prepareName() {
+        this.name = this.name.toLowerCase(Locale.ROOT);
+    }
+
+    private void prepareRemarks() {
+        this.remarks = this.remarks.toLowerCase(Locale.ROOT);
     }
 
     public String getName() {

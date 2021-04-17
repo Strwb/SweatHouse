@@ -1,15 +1,13 @@
 package com.example.sweathouse.database.services;
 
 import com.example.sweathouse.database.entities.Exercise;
-import com.example.sweathouse.database.entities.Tag;
 import com.example.sweathouse.database.repositories.ExerciseRepository;
 import com.example.sweathouse.database.repositories.TagRepository;
 import com.example.sweathouse.database.services.inter.ExerciseService;
-import com.example.sweathouse.postObjects.AddExerciseFormData;
+import com.example.sweathouse.util.postObjects.AddExerciseFormData;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,11 +26,12 @@ public class ExerciseServiceImplementation implements ExerciseService {
     @Override
     @Transactional
     public List<Exercise> getAllExercises() {
-        List<Exercise> selectedExercises = this.exerciseRepository.findAllExercisesWithAllData(this.exerciseRepository.findAllExercisesWithTags());
-        for (Exercise exercise : selectedExercises) {
-            exercise.sortSteps();
-        }
-        return selectedExercises;
+//        List<Exercise> selectedExercises = this.exerciseRepository.findAllExercisesWithAllData(this.exerciseRepository.findAllExercisesWithTags());
+//        for (Exercise exercise : selectedExercises) {
+//            exercise.sortSteps();
+//        }
+//        return selectedExercises;
+        return this.exerciseRepository.findAllExercisesWithAllData(this.exerciseRepository.findAllExercisesWithTags());
     }
 
     @Override
@@ -41,7 +40,11 @@ public class ExerciseServiceImplementation implements ExerciseService {
         // prepare the raw view data from the wrapper class
         entityUtil.prepareForEntity();
         Exercise exercise = new Exercise(entityUtil);
-        this.exerciseRepository.save(exercise);
+        try {
+            this.exerciseRepository.save(exercise);
+        } catch (Exception e) {
+            System.out.println("OOOPSIE DOOPSIE!!!");
+        }
     }
 
 }
