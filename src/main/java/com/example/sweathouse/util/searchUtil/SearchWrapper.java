@@ -7,24 +7,34 @@ import java.util.Locale;
 public class SearchWrapper {
 
     private SearchCategory category;
-    private List<String> searchNames;
-    private List<String> searchTags;
+    private final List<String> searchNames;
+    private final List<String> searchTags;
     private String searchInput;
+    private boolean isEmpty;
 
     public SearchWrapper() {
         this.searchNames = new ArrayList<>();
         this.searchTags = new ArrayList<>();
+        this.isEmpty = true;
     }
 
+    /**
+     * Returns a list of strings of exercise names or tags searched based on the category chosen by the user.
+     * If the user didn't type anything or just whitespace, then returns an empty list of strings.
+     */
     public void prepareForQuery() {
-        switch (this.category) {
-            case TAGS:
-                prepareNamesOrTags(this.searchTags);
-                break;
-            case NAMES:
-                prepareNamesOrTags(this.searchNames);
-                break;
+        if (!"".equals(searchInput.trim())) {
+            switch (this.category) {
+                case TAGS:
+                    prepareNamesOrTags(this.searchTags);
+                    break;
+                case NAMES:
+                    prepareNamesOrTags(this.searchNames);
+                    break;
+            }
+            this.isEmpty = false;
         }
+
     }
 
     /**
@@ -61,6 +71,10 @@ public class SearchWrapper {
 
     public void setCategory(SearchCategory category) {
         this.category = category;
+    }
+
+    public boolean isEmpty() {
+        return isEmpty;
     }
 
 //    @Override

@@ -10,7 +10,7 @@ public interface ExerciseService {
 
     public List<Exercise> getAllExercises();
 
-    public void saveExercise(AddExerciseFormData entityUtil);
+    public boolean saveExercise(AddExerciseFormData entityUtil);
 
     public List<Exercise> searchExercise(SearchWrapper wrapper);
 

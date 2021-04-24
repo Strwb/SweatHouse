@@ -28,42 +28,49 @@ public class ExerciseServiceImplementation implements ExerciseService {
     @Override
     @Transactional
     public List<Exercise> getAllExercises() {
-//        List<Exercise> selectedExercises = this.exerciseRepository.findAllExercisesWithAllData(this.exerciseRepository.findAllExercisesWithTags());
-//        for (Exercise exercise : selectedExercises) {
-//            exercise.sortSteps();
-//        }
-//        return selectedExercises;
-        return this.exerciseRepository.findAllExercisesWithAllData(this.exerciseRepository.findAllExercisesWithTags());
+        List<Exercise> exercisesWithTags = this.exerciseRepository.findAllExercisesWithTags();
+        if (exercisesWithTags.size() == 0) {
+            return new ArrayList<>();
+        } else {
+            return this.exerciseRepository.findAllExercisesWithAllData(exercisesWithTags);
+        }
     }
 
     @Override
     @Transactional
-    public void saveExercise(AddExerciseFormData entityUtil) {
+    public boolean saveExercise(AddExerciseFormData entityUtil) {
+        boolean savedSuccessfully = false;
         // prepare the raw view data from the wrapper class
         entityUtil.prepareForEntity();
-        Exercise exercise = new Exercise(entityUtil);
-        try {
+        // we search if the exercise exists
+        List<Exercise> exerciseList = this.exerciseRepository.findExercisesByName(entityUtil.getName());
+        if (exerciseList.size() == 0) {
+            Exercise exercise = new Exercise(entityUtil);
             this.exerciseRepository.save(exercise);
-        } catch (Exception e) {
-            System.out.println("OOOPSIE DOOPSIE!!!");
+            savedSuccessfully = true;
         }
+        return savedSuccessfully;
     }
 
     @Override
     public List<Exercise> searchExercise(SearchWrapper wrapper) {
         wrapper.prepareForQuery();
-        System.out.println(wrapper);
         List<Exercise> searchResult;
-        switch (wrapper.getCategory()) {
-            case NAMES:
-                searchResult = this.exerciseRepository.searchExercisesByNames(this.exerciseRepository.searchExercisesByNamesStepOne(wrapper.getSearchNames()));
-                break;
-            case TAGS:
-                searchResult = this.exerciseRepository.searchExercisesByTags(this.exerciseRepository.searchExercisesByTagsStepOne(wrapper.getSearchTags()));
-                break;
-            default:
-                searchResult = new ArrayList<>();
+        if (wrapper.isEmpty()) {
+            searchResult = new ArrayList<>();
+        } else {
+            switch (wrapper.getCategory()) {
+                case NAMES:
+                    searchResult = this.exerciseRepository.searchExercisesByNames(this.exerciseRepository.searchExercisesByNamesStepOne(wrapper.getSearchNames()));
+                    break;
+                case TAGS:
+                    searchResult = this.exerciseRepository.searchExercisesByTags(this.exerciseRepository.searchExercisesByTagsStepOne(wrapper.getSearchTags()));
+                    break;
+                default:
+                    searchResult = new ArrayList<>();
+            }
         }
+
         return searchResult;
 
     }

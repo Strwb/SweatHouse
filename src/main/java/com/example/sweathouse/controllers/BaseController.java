@@ -37,13 +37,17 @@ public class BaseController {
 //        List<Tag> tagsAvailable = this.tagService.getAllTags();
         model.addAttribute("tempExerciseUtil", new AddExerciseFormData());
         model.addAttribute("tagsAvailable", this.tagService.getAllTags());
+        model.addAttribute("savedSuccessfully", true);
         return "add-exercise";
     }
 
     @PostMapping("saveNewExercise")
-    public String saveNewExercise(@ModelAttribute("tempExerciseUtil") AddExerciseFormData tempExerciseUtil) {
+    public String saveNewExercise(Model model,
+            @ModelAttribute("tempExerciseUtil") AddExerciseFormData tempExerciseUtil) {
 //        System.out.println(tempExerciseUtil);
-        this.exerciseService.saveExercise(tempExerciseUtil);
+        if (!this.exerciseService.saveExercise(tempExerciseUtil)) {
+            model.addAttribute("savedSuccessfully", false);
+        }
         return "redirect:/home";
     }
 
