@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en">
+<head>
+    <meta
+            charset="UTF-8"
+            http-equiv="Content-Type" content="text/html" />
+    <title>SweatHouse - Add Exercise</title>
+</head>
+
+<body>
+<div>
+    <h1>SweatHouse - Add Exercise</h1>
+</div>
+<div>
+    <form action="#" method="post" th:action="@{saveNewExercise}" th:object="${tempExerciseUtil}">
+        <table>
+            <tr>
+                <td><label>Exercise Name</label></td>
+                <td><input type="text" th:field="*{name}" name="name"/></td>
+            </tr>
+            <tr>
+                <td><label>Exercise Source</label></td>
+                <td><input type="text" th:field="*{source}" name="source"/></td>
+            </tr>
+
+            <!--                We do steps exactly like in mendeley-->
+            <tr>
+                <td><label>Exercise steps (separate them with ";")</label></td>
+                <td><input type="text"th:field="*{stepsRaw}" name="stepsRaw"/></td>
+            </tr>
+
+            <tr></tr>
+            <tr th:each="choice : ${tagsAvailable}">
+                <td><label>Tag: <span th:text="${choice.name}"></span></label></td>
+                <td><input type="checkbox" name="tagsChosen" th:value="${choice.id}" th:field="*{tagsSelected}"/></td>
+            </tr>
+            <tr>
+                <td><label>Exercise Remarks</label></td>
+                <td><input type="text" th:field="*{remarks}" name="remarks"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Submit exercise"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

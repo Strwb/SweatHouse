@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en">
+<head>
+    <meta
+            charset="UTF-8"
+          http-equiv="Content-Type" content="text/html" />
+    <title>SweatHouse</title>
+</head>
+<body>
+  <div>
+<!--    WEBSITE NAME-->
+    <h1>SweatHouse</h1>
+<!--    Search section-->
+      <form action="#" th:action="@{searchForExercise}" method="get" th:object="${searchWrapper}">
+        <label>Search exercise by </label>
+        <select th:field="*{category}">
+          <option th:each="choice : ${T(com.example.sweathouse.util.searchUtil.SearchCategory).values()}"
+                  th:value="${choice}" th:text="${choice.getDisplayName()}"></option>
+        </select>
+          <input type="text" name="searchBox" th:field="*{searchInput}"/>
+          <input type="submit" value="Submit"/>
+          <input type="reset" value="Reset"/>
+      </form>
+    <input type="button" value="Add Exercise"
+              onclick="window.location.href='addExercise'; return false;"/>
+<!--    TABLE OF ALL EXERCISES-->
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Source</th>
+          <th>Steps</th>
+          <th>Remarks</th>
+          <th>Tags</th>
+        </tr>
+        <tr th:each="exercise : ${exercises}">
+          <td th:text="${exercise.getName()}"></td>
+          <td th:text="${exercise.getSource()}"></td>
+          <td>
+            <ul>
+              <li th:each="step : ${exercise.getSteps()}" th:text="${step.getStep()}"></li>
+            </ul>
+          </td>
+          <td th:text="${exercise.getRemarks()}"></td>
+          <td>
+            <ul>
+              <li th:each="tag : ${exercise.getTags()}" th:text="${tag.getName()}"></li>
+            </ul>
+          </td>
+        </tr>
+
+      </table>
+  </div>
+</body>
+</html>
