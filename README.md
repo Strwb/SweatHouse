@@ -1,1 +1,1 @@
-# SweatHouse
+# SweatHouse - physical exercise index
