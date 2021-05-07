@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en">
+<head>
+  <meta
+          charset="UTF-8"
+          http-equiv="Content-Type" content="text/html" />
+  <title>SweatHouse - Register</title>
+</head>
+
+<body>
+<div>
+  <h1>SweatHouse - Register</h1>
+</div>
+<div>
+  <form method="post" th:action="@{processRegistration}" th:object="${registrationRequest}">
+    <table>
+      <tr>
+        <td><label>Email</label></td>
+        <td><input type="text" th:field="*{username}" name="email"/></td>
+      </tr>
+      <tr>
+        <td><label>Password</label></td>
+        <td><input type="password" th:field="*{password}" name="password"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="submit" value="Register"></td>
+      </tr>
+    </table>
+  </form>
+</div>
+</body>
+</html>

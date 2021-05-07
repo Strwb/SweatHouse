@@ -4,7 +4,7 @@ import com.example.sweathouse.database.entities.Exercise;
 import com.example.sweathouse.database.repositories.ExerciseRepository;
 import com.example.sweathouse.database.repositories.TagRepository;
 import com.example.sweathouse.database.services.inter.ExerciseService;
-import com.example.sweathouse.util.postObjects.AddExerciseFormData;
+import com.example.sweathouse.util.formUtil.AddExerciseFormData;
 import com.example.sweathouse.util.searchUtil.SearchWrapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

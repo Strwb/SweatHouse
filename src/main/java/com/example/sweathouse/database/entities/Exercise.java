@@ -1,6 +1,7 @@
 package com.example.sweathouse.database.entities;
 
-import com.example.sweathouse.util.postObjects.AddExerciseFormData;
+import com.example.sweathouse.database.appuser.User;
+import com.example.sweathouse.util.formUtil.AddExerciseFormData;
 
 import javax.persistence.*;
 import java.util.*;
@@ -34,6 +35,9 @@ public class Exercise {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private List<Tag> tags;
+
+    @ManyToMany(mappedBy = "exercises")
+    private List<User> users;
 
     public Exercise() {
 
@@ -91,6 +95,14 @@ public class Exercise {
 
     public void setSteps(List<Step> steps) {
         this.steps = steps;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     public void addSteps(Step step) {

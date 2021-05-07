@@ -1,4 +1,4 @@
-package com.example.sweathouse.util.postObjects;
+package com.example.sweathouse.util.formUtil;
 
 import com.example.sweathouse.database.entities.Step;
 import com.example.sweathouse.database.entities.Tag;

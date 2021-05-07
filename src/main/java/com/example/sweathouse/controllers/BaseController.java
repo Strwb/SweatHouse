@@ -2,7 +2,7 @@ package com.example.sweathouse.controllers;
 
 import com.example.sweathouse.database.services.inter.ExerciseService;
 import com.example.sweathouse.database.services.inter.TagService;
-import com.example.sweathouse.util.postObjects.AddExerciseFormData;
+import com.example.sweathouse.util.formUtil.AddExerciseFormData;
 import com.example.sweathouse.util.searchUtil.SearchWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,4 +57,5 @@ public class BaseController {
         model.addAttribute("exercises", this.exerciseService.searchExercise(wrapper));
         return "search-result";
     }
+
 }
