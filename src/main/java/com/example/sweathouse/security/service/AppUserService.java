@@ -2,12 +2,12 @@ package com.example.sweathouse.security.service;
 
 import com.example.sweathouse.database.appuser.User;
 import com.example.sweathouse.database.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AppUserService implements UserDetailsService {
@@ -28,6 +28,7 @@ public class AppUserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
     }
 
+    @Transactional
     public void signUpUser(User user) {
         boolean userExists = userRepository.findByUsername(user.getUsername()).isPresent();
         if (userExists) {

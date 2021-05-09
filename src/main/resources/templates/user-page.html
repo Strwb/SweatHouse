@@ -11,12 +11,40 @@
 
 <body>
 <div>
-    <h1>Hello User!</h1>
+    <h1 th:text="'Hello ' + ${loggedUser.getUsername()} + '!'"></h1>
 </div>
 
 <div>
     <a href="/home">Home</a>
     <a href="/logout">Log out</a>
+</div>
+
+<div>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Source</th>
+            <th>Steps</th>
+            <th>Remarks</th>
+            <th>Tags</th>
+        </tr>
+        <tr th:each="exercise : ${loggedUserExercises}">
+            <td th:text="${exercise.getName()}"></td>
+            <td th:text="${exercise.getSource()}"></td>
+            <td>
+                <ul>
+                    <li th:each="step : ${exercise.getSteps()}" th:text="${step.getStep()}"></li>
+                </ul>
+            </td>
+            <td th:text="${exercise.getRemarks()}"></td>
+            <td>
+                <ul>
+                    <li th:each="tag : ${exercise.getTags()}" th:text="${tag.getName()}"></li>
+                </ul>
+            </td>
+        </tr>
+
+    </table>
 </div>
 </body>
 </html>

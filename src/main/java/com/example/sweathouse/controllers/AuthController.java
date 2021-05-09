@@ -1,26 +1,24 @@
 package com.example.sweathouse.controllers;
 
 import com.example.sweathouse.database.appuser.User;
+import com.example.sweathouse.database.services.inter.ExerciseService;
 import com.example.sweathouse.security.registration.RegistrationRequest;
-import com.example.sweathouse.security.registration.RegistrationService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.example.sweathouse.security.registration.inter.RegistrationService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.security.Principal;
-
 @Controller
 @RequestMapping(path = "/auth")
 public class AuthController {
 
-    private RegistrationService registrationService;
+    private final RegistrationService registrationService;
+    private final ExerciseService exerciseService;
 
-    public AuthController(RegistrationService registrationService) {
+    public AuthController(RegistrationService registrationService, ExerciseService exerciseService) {
         this.registrationService = registrationService;
+        this.exerciseService = exerciseService;
     }
 
     @GetMapping("/register")
@@ -48,6 +46,7 @@ public class AuthController {
         // Retrieve current (logged in) user's data
         if (userId == loggedUser.getId()) {
             model.addAttribute("loggedUser", loggedUser);
+            model.addAttribute("loggedUserExercises", this.exerciseService.searchUserExercises(loggedUser));
             return "user-page";
         } else {
             return "wrong-user";
@@ -58,5 +57,7 @@ public class AuthController {
         // - get all exercises with all data and display them at this page:
         //      - get all exercises in that many to many relationship
         //      - get all steps and tags connected to those exercises in that relationship
+        // - option to add exercises to favourites at the home page
+        // - option to remove favourites at the user's profile
     }
 }

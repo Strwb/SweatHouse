@@ -60,6 +60,13 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Integer> {
     @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_PASS_DISTINCT_THROUGH, value = "false")})
     public List<Exercise> searchExercisesByTags(@Param("exercises") List<Exercise> exercises);
 
+    // Find user's favourite exercises
+    @Query("select distinct e from Exercise e join fetch e.tags where e in :exercises")
+    @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_PASS_DISTINCT_THROUGH, value = "false")})
+    public List<Exercise> searchUserExercisesStepOne(@Param("exercises") List<Exercise> exercises);
 
 
+    @Query("select distinct e from Exercise e join fetch e.steps where e in :exercises order by e.name asc")
+    @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_PASS_DISTINCT_THROUGH, value = "false")})
+    public List<Exercise> searchUserExercisesStepTwo(@Param("exercises") List<Exercise> exercises);
 }
