@@ -1,9 +1,11 @@
 package com.example.sweathouse.controllers;
 
+import com.example.sweathouse.database.appuser.User;
 import com.example.sweathouse.database.services.inter.ExerciseService;
 import com.example.sweathouse.database.services.inter.TagService;
 import com.example.sweathouse.util.formUtil.AddExerciseFormData;
 import com.example.sweathouse.util.searchUtil.SearchWrapper;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +28,12 @@ public class BaseController {
     }
 
     @GetMapping("home")
-    public String homePage(Model model) {
+    public String homePage(Model model, @AuthenticationPrincipal User loggedUser) {
         model.addAttribute("exercises", this.exerciseService.getAllExercises());
         model.addAttribute("searchWrapper", new SearchWrapper());
+        if (loggedUser != null) {
+            model.addAttribute("loggedUserId", loggedUser.getId());
+        }
         return "home";
     }
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html
-        xmlns:th="http://www.thymeleaf.org"
+        xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
         lang="en">
 <head>
     <meta
@@ -25,6 +25,14 @@
       </form>
     <input type="button" value="Add Exercise"
               onclick="window.location.href='addExercise'; return false;"/>
+    <div sec:authorize="isAuthenticated()">
+      <a th:href="@{/auth/user/{id}(id=${loggedUserId})}">Your profile</a>
+      <a href="/logout">Log out</a>
+    </div>
+    <div sec:authorize="isAnonymous()">
+      <a href="/auth/login">Log in</a>
+      <a href="/auth/register">Register</a>
+    </div>
 <!--    TABLE OF ALL EXERCISES-->
       <table>
         <tr>
