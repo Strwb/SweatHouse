@@ -1,4 +1,4 @@
-package com.example.sweathouse.database.services;
+package com.example.sweathouse.security.service;
 
 import com.example.sweathouse.database.appuser.User;
 import com.example.sweathouse.database.repositories.UserRepository;
@@ -17,7 +17,6 @@ public class AppUserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
     public AppUserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;

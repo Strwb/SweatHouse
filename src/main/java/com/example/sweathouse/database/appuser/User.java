@@ -97,10 +97,6 @@ public class User implements UserDetails {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @Override
     public String getPassword()  {
         return password;

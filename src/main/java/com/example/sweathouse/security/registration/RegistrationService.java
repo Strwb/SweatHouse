@@ -2,7 +2,7 @@ package com.example.sweathouse.security.registration;
 
 import com.example.sweathouse.database.appuser.AppUserRole;
 import com.example.sweathouse.database.appuser.User;
-import com.example.sweathouse.database.services.AppUserService;
+import com.example.sweathouse.security.service.AppUserService;
 import org.springframework.stereotype.Service;
 
 @Service
