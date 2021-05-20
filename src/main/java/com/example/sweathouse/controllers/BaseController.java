@@ -3,6 +3,7 @@ package com.example.sweathouse.controllers;
 import com.example.sweathouse.database.appuser.User;
 import com.example.sweathouse.database.services.inter.ExerciseService;
 import com.example.sweathouse.database.services.inter.TagService;
+import com.example.sweathouse.database.services.inter.UserService;
 import com.example.sweathouse.util.formUtil.AddExerciseFormData;
 import com.example.sweathouse.util.searchUtil.SearchWrapper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,10 +17,14 @@ public class BaseController {
 
     private final ExerciseService exerciseService;
     private final TagService tagService;
+    private final UserService userService;
 
-    public BaseController(ExerciseService exerciseService, TagService tagService) {
+    public BaseController(ExerciseService exerciseService,
+                          TagService tagService,
+                          UserService userService) {
         this.exerciseService = exerciseService;
         this.tagService = tagService;
+        this.userService = userService;
     }
 
     @GetMapping("")
@@ -29,10 +34,14 @@ public class BaseController {
 
     @GetMapping("home")
     public String homePage(Model model, @AuthenticationPrincipal User loggedUser) {
-        model.addAttribute("exercises", this.exerciseService.getAllExercises());
+//        model.addAttribute("exercises", this.exerciseService.getAllExercises());
         model.addAttribute("searchWrapper", new SearchWrapper());
         if (loggedUser != null) {
+            // if logged in pass user's id so that we can implement some user functionality
             model.addAttribute("loggedUserId", loggedUser.getId());
+            model.addAttribute("exerciseWrappers", this.userService.getExerciseWrapperList(loggedUser.getId()));
+        } else {
+            model.addAttribute("exerciseWrappers", this.userService.getExerciseWrapperList(-1));
         }
         return "home";
     }

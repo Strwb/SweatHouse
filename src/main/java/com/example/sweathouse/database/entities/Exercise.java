@@ -158,15 +158,23 @@ public class Exercise {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Exercise{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", source='" + source + '\'' +
-                ", remarks='" + remarks + '\'' +
-                ", steps=" + steps +
-                ", tags=" + tags +
-                '}';
+    public void addUser(User user) {
+        if (this.users == null) {
+            this.users = new ArrayList<>();
+        }
+        this.users.add(user);
     }
+
+
+//    @Override
+//    public String toString() {
+//        return "Exercise{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", source='" + source + '\'' +
+//                ", remarks='" + remarks + '\'' +
+//                ", steps=" + steps +
+//                ", tags=" + tags +
+//                '}';
+//    }
 }

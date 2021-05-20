@@ -1,64 +1,80 @@
 <!DOCTYPE html>
 <html
-        xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
         lang="en">
 <head>
-    <meta
-            charset="UTF-8"
+    <link rel="stylesheet" href="/css/main.css">
+    <meta charset="UTF-8"
           http-equiv="Content-Type" content="text/html" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
     <title>SweatHouse</title>
 </head>
 <body>
-  <div>
-<!--    WEBSITE NAME-->
+<div>
+    <!--    WEBSITE NAME-->
     <h1>SweatHouse</h1>
-<!--    Search section-->
-      <form action="#" th:action="@{searchForExercise}" method="get" th:object="${searchWrapper}">
+    <!--    Search section-->
+    <form action="#" th:action="@{searchForExercise}" method="get" th:object="${searchWrapper}">
         <label>Search exercise by </label>
+        <!--        A drop down list of search categories-->
         <select th:field="*{category}">
-          <option th:each="choice : ${T(com.example.sweathouse.util.searchUtil.SearchCategory).values()}"
-                  th:value="${choice}" th:text="${choice.getDisplayName()}"></option>
+            <option th:each="choice : ${T(com.example.sweathouse.util.searchUtil.SearchCategory).values()}"
+                    th:value="${choice}" th:text="${choice.getDisplayName()}"></option>
         </select>
-          <input type="text" name="searchBox" th:field="*{searchInput}"/>
-          <input type="submit" value="Submit"/>
-          <input type="reset" value="Reset"/>
-      </form>
+        <!--        Search bar-->
+        <input type="text" name="searchBox" th:field="*{searchInput}"/>
+        <!--        Submit button-->
+        <input type="submit" value="Submit" class="btn btn-secondary"/>
+        <!--        Reset button-->
+        <input type="reset" value="Reset" class="btn btn-secondary"/>
+    </form>
     <input type="button" value="Add Exercise"
-              onclick="window.location.href='addExercise'; return false;"/>
+           onclick="window.location.href='addExercise'; return false;" class="btn btn-success"/>
+    <!--    If logged in link to user's page-->
     <div sec:authorize="isAuthenticated()">
-      <a th:href="@{/auth/user/{id}(id=${loggedUserId})}">Your profile</a>
-      <a href="/logout">Log out</a>
+        <a th:href="@{/auth/user/{id}(id=${loggedUserId})}" class="btn btn-primary">Your profile</a>
+        <a href="/logout" class="btn btn-primary">Log out</a>
     </div>
+    <!--    If logged out link to log in form-->
     <div sec:authorize="isAnonymous()">
-      <a href="/auth/login">Log in</a>
-      <a href="/auth/register">Register</a>
+        <a href="/auth/login" class="btn btn-primary">Log in</a>
+        <a href="/auth/register" class="btn btn-primary">Register</a>
     </div>
-<!--    TABLE OF ALL EXERCISES-->
-      <table>
+    <!--    TABLE OF ALL EXERCISES-->
+    <table>
         <tr>
-          <th>Name</th>
-          <th>Source</th>
-          <th>Steps</th>
-          <th>Remarks</th>
-          <th>Tags</th>
+            <th>Name</th>
+            <th>Source</th>
+            <th>Steps</th>
+            <th>Remarks</th>
+            <th>Tags</th>
         </tr>
-        <tr th:each="exercise : ${exercises}">
-          <td th:text="${exercise.getName()}"></td>
-          <td th:text="${exercise.getSource()}"></td>
-          <td>
-            <ul>
-              <li th:each="step : ${exercise.getSteps()}" th:text="${step.getStep()}"></li>
-            </ul>
-          </td>
-          <td th:text="${exercise.getRemarks()}"></td>
-          <td>
-            <ul>
-              <li th:each="tag : ${exercise.getTags()}" th:text="${tag.getName()}"></li>
-            </ul>
-          </td>
+        <tr th:each="exercise : ${exerciseWrappers}">
+            <td th:text="${exercise.getExercise().getName()}"></td>
+            <td th:text="${exercise.getExercise().getSource()}"></td>
+            <td>
+                <ul>
+                    <li th:each="step : ${exercise.getExercise().getSteps()}" th:text="${step.getStep()}"></li>
+                </ul>
+            </td>
+            <td th:text="${exercise.getExercise().getRemarks()}"></td>
+            <td>
+                <ul>
+                    <li th:each="tag : ${exercise.getExercise().getTags()}" th:text="${tag.getName()}"></li>
+                </ul>
+            </td>
+            <td>
+                <div sec:authorize="isAuthenticated()">
+                    <a th:if="${exercise.isFavourite()}" th:href="@{/auth/user/addToFavourites(exerciseId=${exercise.getExercise().getId()})}" class="btn btn-success">Add to favourites</a>
+                    <a th:unless="${exercise.isFavourite()}" th:href="@{/auth/user/removeFromFavourites(exerciseId=${exercise.getExercise().getId()})}" class="btn btn-danger">Remove from favourites</a>
+                </div>
+            </td>
         </tr>
 
-      </table>
-  </div>
+    </table>
+</div>
 </body>
 </html>

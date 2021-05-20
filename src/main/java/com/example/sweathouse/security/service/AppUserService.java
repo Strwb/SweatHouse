@@ -2,12 +2,15 @@ package com.example.sweathouse.security.service;
 
 import com.example.sweathouse.database.appuser.User;
 import com.example.sweathouse.database.repositories.UserRepository;
+import com.example.sweathouse.database.services.inter.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class AppUserService implements UserDetailsService {
@@ -23,6 +26,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByUsername(email)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));

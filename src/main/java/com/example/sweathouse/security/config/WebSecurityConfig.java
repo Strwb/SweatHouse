@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable() // so that we can send post requests without being rejected
                 .authorizeRequests()
-                    .antMatchers("/", "/home", "/auth/**")
+                    .antMatchers("/", "/home", "/auth/**", "/css/**", "/js/**", "/searchForExercise")
                     .permitAll()
                     .anyRequest()
                     .authenticated()
@@ -56,6 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID", "remember-me")
                     .logoutSuccessUrl(("/home"));
+        // improve report to max points - 7 days
+        // highlight improved parts of the report
 
     }
 

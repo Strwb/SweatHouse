@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +26,7 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_exercises",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -112,5 +113,17 @@ public class User implements UserDetails {
 
     public void setExercises(List<Exercise> exercises) {
         this.exercises = exercises;
+    }
+
+    public void addExercise(Exercise exercise) {
+        if (this.exercises == null) {
+            this.exercises = new ArrayList<>();
+        }
+        this.exercises.add(exercise);
+        exercise.addUser(this);
+    }
+
+    public void removeExercise(Exercise exercise) {
+        this.exercises.removeIf(e -> e.getId() == exercise.getId());
     }
 }

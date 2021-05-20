@@ -2,6 +2,7 @@ package com.example.sweathouse.controllers;
 
 import com.example.sweathouse.database.appuser.User;
 import com.example.sweathouse.database.services.inter.ExerciseService;
+import com.example.sweathouse.database.services.inter.UserService;
 import com.example.sweathouse.security.registration.RegistrationRequest;
 import com.example.sweathouse.security.registration.inter.RegistrationService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,10 +16,12 @@ public class AuthController {
 
     private final RegistrationService registrationService;
     private final ExerciseService exerciseService;
+    private final UserService userService;
 
-    public AuthController(RegistrationService registrationService, ExerciseService exerciseService) {
+    public AuthController(RegistrationService registrationService, ExerciseService exerciseService, UserService userService) {
         this.registrationService = registrationService;
         this.exerciseService = exerciseService;
+        this.userService = userService;
     }
 
     @GetMapping("/register")
@@ -51,13 +54,19 @@ public class AuthController {
         } else {
             return "wrong-user";
         }
-        //TODO:
-        // - add link at home page that figures out the current user and redirects here
-        // - verify if id in the URL is equal to the logged user's id
-        // - get all exercises with all data and display them at this page:
-        //      - get all exercises in that many to many relationship
-        //      - get all steps and tags connected to those exercises in that relationship
-        // - option to add exercises to favourites at the home page
-        // - option to remove favourites at the user's profile
+    }
+
+    @GetMapping("/user/addToFavourites")
+    public String addToFavourites(@RequestParam("exerciseId") int exerciseId,
+                                  @AuthenticationPrincipal User loggedUser) {
+        this.userService.addFavouriteExercise(loggedUser, exerciseId);
+        return "redirect:/auth/user/" + loggedUser.getId();
+    }
+
+    @GetMapping("/user/removeFromFavourites")
+    public String removeFromFavourites(@RequestParam("exerciseId") int exerciseId,
+                                       @AuthenticationPrincipal User loggedUser) {
+        this.userService.removeExerciseFromFavourites(loggedUser, exerciseId);
+        return "redirect:/auth/user/" + loggedUser.getId();
     }
 }
