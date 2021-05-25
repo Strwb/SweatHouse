@@ -34,7 +34,7 @@ public class AuthController {
     public String processRegistration(@ModelAttribute("registrationRequest") RegistrationRequest request) {
         System.out.println(request);
         registrationService.register(request);
-        return "user-page";
+        return "redirect:/home";
     }
 
     @GetMapping("/login")
